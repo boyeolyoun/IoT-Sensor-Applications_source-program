@@ -1,2 +1,2 @@
 # source-program
-IoT sensor application programming
+IoT sensors application programming

@@ -1,0 +1,19 @@
+from tkinter import *
+root = Tk()
+
+
+def func(): 
+    label.config(text= 'Pushed') 
+
+def func_event(ev): 
+	label.config(text= 'Push Button')
+	
+label = Label(root, text = 'Push Buton') 
+label.pack() 
+button = Button(root, text='push!', command = func) 
+button.pack() 
+
+
+button.bind('<Leave>',func_event) 
+
+root.mainloop()

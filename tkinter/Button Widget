@@ -1,0 +1,10 @@
+from tkinter import *
+root = Tk()
+
+
+def func():
+    print('Pushed') 
+
+button = Button(root, text='push!', command = func) 
+button.pack() 
+root.mainloop()

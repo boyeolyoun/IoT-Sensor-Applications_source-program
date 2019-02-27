@@ -1,0 +1,13 @@
+from tkinter import *
+root = Tk()
+
+
+def func():
+    label.config(text= 'Pushed') 
+
+
+label = Label(root, text = 'Push Buton') 
+label.pack()
+button = Button(root, text='push!', command = func)
+button.pack() 
+root.mainloop()

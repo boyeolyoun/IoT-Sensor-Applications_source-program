@@ -1,0 +1,30 @@
+import spidev
+from time import sleep
+
+spi=spidev.SpiDev()
+spi.open(0,0)
+
+tempChannel = 1
+sleepTime = 1
+
+def getReading(channel):
+	rawData = spi.xfer([1, (8 + channel) << 4, 0])
+	processedData = ((rawData[1]&3) << 8) + rawData[2]
+	return processedData
+	
+def convertVoltage(bitValue, decimalPlaces=2):
+    voltage = (bitValue * 3.3) / float(1023)
+    voltage = round(voltage, decimalPlaces)
+    return voltage
+
+def convertTemp(bitValue, decimalPlaces=2):
+    temperature = ((bitValue * 330) / float(1023))
+    temperature = round(temperature, decimalPlaces)
+    return temperature
+
+while (1):
+    tempData = getReading(tempChannel)
+    tempVoltage = convertVoltage(tempData)
+    temperature = convertTemp(tempData)
+    print ("Temp bitValue = {}; Voltage = {} V; Temp = {} C".format(tempData, tempVoltage, temperature))
+    sleep(sleepTime)

@@ -1,0 +1,16 @@
+# git clone https://github.com/TomFoerster/BMP280.git  을 입력 하여 BMP280라이브러리를 다운
+# 설치가 완료되면 cd BMP280 으로 BMP280 폴더로 이동한 뒤, sudo python setup.py install 명령어로 라이브러리를 설치
+# 설치가 끝나면 BMP280 폴더 안데 examples 폴더로 이동
+# python  measure.py 명령어로 실행
+
+import time
+import BMP280.BMP280 as BMP280
+ 
+sensor = BMP280.BMP280(modep=BMP280.BMP280_ULTRAHIGHRES,modet=BMP280.BMP280_T_O2,filter=BMP280.BMP280_FILTER_OFF,address=BMP280.BMP280_I2CADDR2)
+ 
+while True:
+        temp1, pressure1 = sensor.read_temperature_pressure()
+        altitude1 = sensor.read_sealevel_pressure(altitude_m= 330.0)
+ 
+        print("temp : " + str(temp1) + ", pressure : " + str(pressure1) + ", altitude : " + str(altitude1) )
+        time.sleep(10)

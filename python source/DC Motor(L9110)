@@ -1,0 +1,37 @@
+import RPi.GPIO as GPIO
+import time
+
+FAN_IA = 23
+FAN_IB = 24
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(FAN_IA, GPIO.OUT)
+GPIO.setup(FAN_IB, GPIO.OUT)
+
+def Left_2_Second() :
+	GPIO.output(FAN_IA, True)
+	GPIO.output(FAN_IB, False)
+	time.sleep(2)
+	
+def Right_2_Second() :
+	GPIO.output(FAN_IA, False)
+	GPIO.output(FAN_IB, True)
+	time.sleep(2)
+	
+def Wait_2_Second() :
+	GPIO.output(FAN_IA, False)
+	GPIO.output(FAN_IB, False)
+	time.sleep(2)
+	
+if __name__ == "__main__" :
+	try :
+		while True :
+			Left_2_Second()
+			Wait_2_Second()
+			Right_2_Second()
+			Wait_2_Second()
+			
+	except : 
+		GPIO.cleanup()
+		print("end")
+	

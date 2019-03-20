@@ -1,0 +1,24 @@
+#include <wiringPi.h>
+#include <stdio.h>
+#include <string.h>
+#include "i2c_lcd.h"
+
+int main (void)
+{
+	int fd2;
+	
+	printf("Yang Raspberry Pi I2C LCD test program\n");
+	
+	fd2=i2c_lcdInit(0x3f);
+	
+	if(fd2 < 0){
+		printf("lcdInit 2 failed\n");
+		return 1;
+	}
+	
+	lcdPosition (fd2,0,0); lcdPut (fd2,"Hello world");
+	lcdPosition (fd2,0,1); lcdPut (fd2,"--------------");
+	
+	return 0;
+	
+}

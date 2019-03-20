@@ -1,0 +1,15 @@
+import RPi.GPIO as GPIO
+from time import sleep
+
+PIN = 20
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(PIN, GPIO.IN)
+
+try:
+    while True:
+        if GPIO.input(PIN) == 0:
+            print("Button is pressed")
+        sleep(0.1)
+
+except KeyboardInterrupt:
+    GPIO.cleanup()

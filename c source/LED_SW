@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <wiringPi.h>
+
+#define KEY 20
+
+void isr_key(void)
+{
+    printf("Key is pressed\r\n");
+}
+
+void main(void)
+{
+    unsigned int sec = 0;
+    wiringPiSetupGpio();
+    pinMode(KEY, INPUT);
+    wiringPiISR(KEY, INT_EDGE_FALLING, isr_key);
+
+    while (1) {
+        printf("%d sec.\r\n", sec);
+        sec = sec + 1;
+        delay(1000);
+    }
+}

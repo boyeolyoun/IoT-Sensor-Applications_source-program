@@ -1,0 +1,22 @@
+import snbus
+import time
+import i2c_module as I2C
+
+I2C.lcd_init()
+
+I2C.lcd_string("Hello World",I2C.LCD_LINE_1)
+I2C.lcd_string("Connect Complete",I2C.LCD_LINE_2)
+time.sleep(3)
+
+I2C.lcd_init()
+
+scroll = "Scroll"
+whitespace = " "
+
+for i in range(0,11):
+	I2C.lcd_string("{}{}".format(whitespace=i,scroll), I2C.LCD_LINE_1)
+	I2C.lcd_string("{}{}".format(whitespace=(10-i),scroll), I2C.LCD_LINE_2)
+	time.sleep(0.01)
+	
+time.sleep(1)
+I2C.lcd_init()

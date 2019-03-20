@@ -1,0 +1,21 @@
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+print ("Use GPIO 17 to turn on/off LED")
+
+GPIO.setup(17, GPIO.OUT)
+
+GPIO.output(17, False)
+
+count = 0
+
+while count < 3 :
+    GPIO.output(17, True)
+    time.sleep(1)
+    GPIO.output(17, False)
+    time.sleep(2)
+    count += 1
+print ("LED Test End")
+
+GPIO.cleanup()

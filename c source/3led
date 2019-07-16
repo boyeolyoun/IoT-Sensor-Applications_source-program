@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <wiringPi.h>
+
+#define LED_GREEN 0
+#define LED_ORANGE 2
+#define LED_RED 3
+
+void LED_ON(int led, int time){
+        digitalWrite(led, HIGH);
+        delay(time);
+        digitalWrite(led, LOW);
+}
+
+int main(){
+        if(wiringPiSetup()== -1){
+                printf("error \n");
+                return 1;
+}
+
+pinMode(LED_GREEN, OUTPUT);
+pinMode(LED_ORANGE, OUTPUT);
+pinMode(LED_RED, OUTPUT);
+
+while(1){
+        LED_ON(LED_GREEN, 500);
+        LED_ON(LED_ORANGE, 300);
+        LED_ON(LED_RED, 500);
+}
+return 0;
+}

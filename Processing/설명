@@ -1,0 +1,17 @@
+디자이너를 위한 Processing 언어
+프로세싱(Processing)은 컴퓨터 프로그래밍의 본질을 시각적 개념으로 프로그래머가 아닌 사람들에게 교육할 목적으로 
+뉴 미디어 아트, 시각 디자인 공동체를 위해 개발된 오픈 소스 프로그래밍 언어이자 통합 개발 환경(IDE)이다. 
+2001년 MIT 미디어 연구소에서 케이시 리아스와 벤자민 프라이가 시작하였다.
+
+먼저 PC에서 Window 버전으로 실행하여, 아두이노와 연동 테스트를 하도록 한다.
+(1)	Processing 설치
+https://processing.org/
+Download Processing
+
+(2)	예제 프로그램 실행(1) : 아누이노 프로그래밍
+processing.serial.* 라이브러리는 Plotter by Devin Cooney를 설치한다.
+
+예제 프로그램 실행(2) : 프로세싱 프로그래밍
+COM Port 및 통신속도를 아두이노와 맞추어 준다.
+
+draw_radar.pde 를 같은 폴더에 저장

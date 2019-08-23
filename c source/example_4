@@ -3,14 +3,14 @@
 #include "motor.h"
 
 int main(void){
-    ifwiringPiSetup()== -1 {
-        return 1:
+    if(wiringPiSetup()== -1) {
+        return 1;
     }
 softPwmCreate(FAN_IA, 0, 1000);
 
 while (1){
     int press;
-    scanf("%c", &press)
+    scanf("%c", &press);
     if(press == 'q'){
         Stop();
     }

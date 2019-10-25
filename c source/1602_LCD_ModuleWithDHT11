@@ -62,5 +62,3 @@ void read_dht11_dat(int lcd,struct tm *date)
 }
 
 
-#endif
- /* LCDMODULEWITHDHT11_H_ */

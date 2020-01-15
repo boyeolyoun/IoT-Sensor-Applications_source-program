@@ -1,11 +1,9 @@
 import RPi.GPIO as GPIO
 import time
-
 pin = 18
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(pin, GPIO.OUT)
-
 p = GPIO.PWM(pin, 50)
 p.start(0)
 
@@ -17,9 +15,7 @@ def doAngle(angle):
     p.ChangeDutyCycle(angle)
     print ("Angle: %d" %angle)
     time.sleep(0.5)
-
 try :
-
     while True:
         var = input("Enter L/R/C :")
         if var == 'R' or var == 'r' :
@@ -31,8 +27,6 @@ try :
         elif var == 'C' or var == 'c':
             print ("Center")
             doAngle(center_angle)
-
 except KeyboardInterrupt:
-    p.stop()
-    
+    p.stop() 
 GPIO.cleanup()    

@@ -67,7 +67,7 @@ try  :
     print("Ctrl-C")
 
     while True :
-        ALL()
+        All()
 
         for i in range(LED_COUNT) :
             SetColor(strip, i, neopixel.Color(0, 0, 0), 1)

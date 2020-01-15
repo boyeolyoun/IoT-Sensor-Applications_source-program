@@ -21,14 +21,14 @@ def OneByOne() :
             for j in range(256) :
                 SetColor(strip, i, neopixel.Color(j, 0, 255 - j), 1)
             for j in range(256) :
-                SetColor(strip, i, neopixel.Color(j255 - j, j, 0), 1)
+                SetColor(strip, i, neopixel.Color(255 - j, j, 0), 1)
             for j in range(256) :
-                SetColor(strip, i, neopixel.Color(0, 255 - j,j), 1)
+                SetColor(strip, i, neopixel.Color(0, 255 - j, j), 1)
         if i % 3 == 2 :
             for j in range(256) :
                 SetColor(strip, i, neopixel.Color(255 - j, j, 0), 1)
             for j in range(256) :
-                SetColor(strip, i, neopixel.Color(0, 255 - j.j), 1)
+                SetColor(strip, i, neopixel.Color(0, 255 - j, j), 1)
             for j in range(256) :
                 SetColor(strip, i, neopixel.Color(j, 0, 255 - j), 1)
         if i % 3 == 0 :

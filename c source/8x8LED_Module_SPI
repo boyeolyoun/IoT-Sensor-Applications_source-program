@@ -5,11 +5,11 @@
 #define  SPI_SPEED 1000000
 #define  BRIGHT 0
 
-void data_8x8led( unsigned char msb, int lsb, int select) {
+void data_8x8led( unsigned char msb, int lsb, int select) { 
 	int i;
 	unsigned char out[2] = { 0 };
-	out[0] = msb;
-	if(select ==2 ) {
+	out[0] = msb; //Least Significant Bit, 데이터 형에서의 가장 낮은 위치의 Bit 2^0
+	if(select ==2 ) { //Most Significant Bit, 데이터 형의 최상위 비트, 2^7
 		for( i = 0; i< 8; ++i){
 			out[1] = (( lsb % 10) << 1 );
 			lsb = lsb / 10;

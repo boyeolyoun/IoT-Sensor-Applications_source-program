@@ -1,6 +1,6 @@
 import neopixel, time, sys
 
-LED_COUNT = 8
+LED_COUNT = 5
 LED_PIN = 18
 LED_BRIGHTNESS = 255
 LED_CHANNEL =0

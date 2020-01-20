@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <wiringPi.h>
+#include <softPwm.h>
+
+#define SERVO 1
+#define INFRARED 11
+#define LED 0
+
+static void Angle(int angle){
+    softPwmWrite(SERVO,15-angle/10);
+    delay(1000);
+}
+
+int main(void){
+    if(wiringPiSetup()==-1){return 1;}
+
+    pinMode(INFRARED, INPUT);
+    pinMode(LED,OUTPUT);
+    softPwmCreate(SERVO,0,180  );
+    for(;;){
+        if(digitalRead(INFRARED)==HIGH){
+            digitalWrite(LED,HIGH);
+            Angle(0);
+        }else{
+            digitalWrite(LED,LOW);
+            Angle(90);
+        }
+    }
+    return 0;
+}

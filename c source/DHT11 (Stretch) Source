@@ -36,7 +36,7 @@ void read_dht11_dat()
 
 		if ((i >= 4) && (i%2 == 0)) {
 			dht11_dat[j/8] <<= 1;
-			if (counter > 25)
+			if (counter > 50) //stretch에서 50으로 변경
 				dht11_dat[j/8] |= 1;
 			j++;
 		}

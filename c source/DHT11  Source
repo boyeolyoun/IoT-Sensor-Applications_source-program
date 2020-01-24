@@ -4,21 +4,26 @@
 #include <stdint.h>
 #define Maxtiming 85
 #define DhtPin 7
-//DHT11 센서는 데이터 핀을 80 μsec 동안 LOW 그리고 80 μsec 동안 HIGH 상태 신호를 만들어 라즈베리에 반응
-센서가 보낼 수 있는 데이터 비트 수, 통상 40bits로 반응.  처음 3개의 비트(Response, pullup ready, start to transmit bit) + 40개의 데이터비트 * 2(LOW, HIGH 반복)
-//
+
+/* DHT11 센서는 데이터 핀을 80 μsec 동안 LOW 그리고 80 μsec 동안 HIGH 상태 신호를 만들어 라즈베리에 반응
+센서가 보낼 수 있는 데이터 비트 수, 통상 40bits로 반응.  처음 3개의 비트(Response, pullup ready, start to transmit bit) 
++ 40개의 데이터비트 * 2(LOW, HIGH 반복)
+*/
 
 int dht11_dat[5] = {0,0,0,0,0};
-//전송되는 데이터 구성은 습도데이타의 정수부분: 소수부분: 온도 데이터 정수부분: 소수부분: 체크 섬 형태로 구성, 40개 데이터 비트//
+
+/*전송되는 데이터 구성은 습도데이타의 정수부분: 소수부분: 온도 데이터 정수부분: 소수부분: 체크 섬 형태로 구성, 
+40개 데이터 비트
+*/
 
 void read_dht11_dat(){
     int laststate = HIGH;
     int counter = 0;
     int j = 0,i;
     float f;
-//user-defined type이라고 부르며 stdint.h에 정의 ;
+/*user-defined type이라고 부르며 stdint.h에 정의 ;
 char, int가 word의 크기에 따라 달라지는데 이를 방지하기 위하여 쓰는 형식
-//
+*/
 
     dht11_dat[0] = dht11_dat[1] = dht11_dat[2] = dht11_dat[3] = dht11_dat[4] = 0;
 
@@ -27,30 +32,34 @@ char, int가 word의 크기에 따라 달라지는데 이를 방지하기 위하
     delay(18);
     digitalWrite(DhtPin,HIGH);
     delayMicroseconds(40);
-    //DHT11은 여타 센서와 다르게 신호의 길이로 데이터를 내보냄 .
+    
+ /* DHT11은 여타 센서와 다르게 신호의 길이로 데이터를 내보냄 .
 처음에 신호선으로 LOW를 18ms동안, 그리고 20 ~ 40us동안 HIGH신호를 주면 start 신호
 여기서는 최대값 40us를 사용 , DHT11에서 신호를 출력하기 시작
-//
+*/
     pinMode(DhtPin, INPUT);
-//라즈베리파이는 받아야 하는 입장이므로 pinMode를 이용하여 INPUT으로 변경
-//
+    
+// 라즈베리파이는 받아야 하는 입장이므로 pinMode를 이용하여 INPUT으로 변경
     for(i = 0;i < Maxtiming; i++){
         counter = 0;
-//MAXTIMINGS만큼 for문을 반복하며 값을 읽음 
+        
+/*MAXTIMINGS만큼 for문을 반복하며 값을 읽음 
 이때 MAXTIMINGS는 85의 값을 가지는데 이는 40개의 데이터 비트 * 2(LOW, HIGH가 반복되어야 데이터 1개를 읽을 수 있음)
-+ 3개의 처음 비트 - Response signal, pullup ready signal, 처음 start to transmit bit 해서 3개, 여유 2bit (83으로 가능함)
-//
++ 3개의 처음 비트 - Response signal, pullup ready signal, 처음 start to transmit bit 해서 3개, 
+여유 2bit (83으로 가능함)
+*/
             while(digitalRead(DhtPin)==laststate){
                 counter++;
                 delayMicroseconds(1);
-//이 부분에서 laststate와 반대가 되었을 경우 비트가 HIGH에서 LOW로 혹은 LOW에서 HIGH로 바뀌었을 경우를 인식
-//
+// 이 부분에서 laststate와 반대가 되었을 경우 비트가 HIGH에서 LOW로 혹은 LOW에서 HIGH로 바뀌었을 경우를 인식
+
                 if(counter == 255){
                     break;
-//1us단위로 highlow, lowhigh로 안되면 count를 증가
+                    
+/* 1us단위로 highlow, lowhigh로 안되면 count를 증가
 다만 최대 시간을 255us로 지정하여 이 시간 동안 바뀌지 않을 경우
 에러로 인식하고 break와 if문을 이용하여 에러를 검출
-//
+*/
         }
             }
             laststate = digitalRead(DhtPin);
@@ -60,35 +69,39 @@ char, int가 word의 크기에 따라 달라지는데 이를 방지하기 위하
                 if((i>=4) && (i%2 == 0)){
                     dht11_dat[j/8] <<=1;
                     
- //if 연산식을 보면 처음 3개는 데이터와 관계가 없기에 i >= 4를 써주었고 i % 2 == 0을 해서 데이터를 나타내는 HIGH상태에서만 작동. 홀수번째는 LOW상태의 start to transmit bit이므로 필요가 없기 때문.
+ /* if 연산식을 보면 처음 3개는 데이터와 관계가 없기에 i >= 4를 써주었고 i % 2 == 0을 해서 데이터를 나타내는 HIGH상태에서만 작동. 
+ 홀수번째는 LOW상태의 start to transmit bit이므로 필요가 없기 때문.
 J의 연속값을 8bit로 저장
-//
+*/
                     if(counter > 50) dht11_dat[j/8] |= 1;
                     j++;
-//비트가 반전될 때 까지 count를 측정하였는데 이게 20이상이면 1이라고 값을 쓴다. 20은데이터시트에  25 ~ 28us정도를 data 0으로 지정하므로
-count연산과 if문 연산 속도가 있기에 25정도를 바로 써주게 되면 지연이 일어나서 이미 늦어 버림. 습도, 온도, Checksum등 50bit의 자료 전송
-//   
+/* 비트가 반전될 때 까지 count를 측정하였는데 이게 20이상이면 1이라고 값을 쓴다. 20은데이터시트에  25 ~ 28us정도를 data 0으로 
+지정하므로 count연산과 if문 연산 속도가 있기에 25정도를 바로 써주게 되면 지연이 일어나서 이미 늦어 버림. 습도, 온도, 
+Checksum등  50bit의 자료 전송
+*/ 
             }
     }
 
         if((j>=40) && (dht11_dat[4]) == (dht11_dat[0]+dht11_dat[1]+dht11_dat[2]+dht11_dat[3] & 0xFF)){
             f = dht11_dat[2]*9./5. + 32;
             printf("Humidity = %d.%d %% Temperature = %d.%d C(%.1f F)\n", dht11_dat[0],dht11_dat[1],dht11_dat[2],dht11_dat[3],f);
-//read 40 bits (8bit x 5 ) + verify checksum(0xff) parity bit (잘된 전송값 확인) 
+/* read 40 bits (8bit x 5 ) + verify checksum(0xff) parity bit (잘된 전송값 확인) 
 값이 다 쓰였으면 0, 1, 2, 3번 값을 더한 값과 마지막 4번 값을 비교. 
-//
+*/
         }
         else{
             printf("Data not good, skip\n");
         }
-//비교하여 잘 나왔다면 값 출력을, 아니라면 Data get failed라는 문장을 출력//
+
+// 비교하여 잘 나왔다면 값 출력을, 아니라면 Data get failed라는 문장을 출력
 
     
 }
 
 int main(void){
     printf("Raspberry Pi wiringPi DHT11 Temperature test program\n");
-//main에서 1번씩 함수를 호출하여 실행하는 형태//
+
+//main에서 1번씩 함수를 호출하여 실행하는 형태
 
     if(wiringPiSetup() == -1) exit(1);
 

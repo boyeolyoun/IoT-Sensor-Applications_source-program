@@ -1,5 +1,5 @@
 int btnPin=2;
-int btmState=LOW;
+int btnState=LOW;
 
 void setup(){
   Serial.begin(9600);

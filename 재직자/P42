@@ -1,0 +1,12 @@
+int btnPin=2;
+int btmState=LOW;
+
+void setup(){
+  Serial.begin(9600);
+  pinMode(btnPin,INPUT);
+}
+
+void loop(){
+  btnState = digitalRead(btnPin);
+  Serial.println(btnState);
+}

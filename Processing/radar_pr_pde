@@ -1,4 +1,4 @@
-//file명 : radarprpde
+//file명 : radar_pr_pde
 
 import processing.serial.*;
 Serial serial;

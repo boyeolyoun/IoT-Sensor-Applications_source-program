@@ -36,4 +36,4 @@ void mouseClicked(){
   else if(mouseX > 20 && mouseX < 120 && mouseY > 50 && mouseY < 70)
     serial.write("resume$");
 }
-© 2020 GitHub, Inc.
+

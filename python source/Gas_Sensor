@@ -56,3 +56,33 @@ if __name__ == '__main__':
         loop()
     except KeyboardInterrupt:
         destroy()
+
+
+
+###
+
+To install the library from source (recommended) run the following commands
+ on a Raspberry Pi or other Debian-based OS system:
+Adafruit 파이썬 MCP3008자료
+https://github.com/adafruit/Adafruit_Python_MCP3008
+
+sudo apt-get install git build-essential python-dev
+cd ~
+git clone https://github.com/adafruit/Adafruit_Python_MCP3008.git
+cd Adafruit_Python_MCP3008
+sudo python setup.py install
+
+
+
+
+
+On a Debian-based Linux like Raspbian, Ubuntu, etc. in a terminal execute:
+Adafruit 파이썬GPIO자료
+https://github.com/adafruit/Adafruit_Python_GPIO
+
+sudo apt-get update
+sudo apt-get install build-essential python-pip python-dev python-smbus git
+git clone https://github.com/adafruit/Adafruit_Python_GPIO.git
+cd Adafruit_Python_GPIO
+sudo python setup.py install
+###

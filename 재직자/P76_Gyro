@@ -1,0 +1,36 @@
+import time, smbus
+
+def ScaleValue(val):
+	if val>=32768:
+		val=val-65536
+	return val
+
+def Read_X_Accel():
+	h=bus.read_byte_data(mpu6050_addr,0x3B)
+	l=bus.read_byte_data(mpu6050_addr,0x3C)
+	x=ScaleValue((h<<8)|1)
+	return x
+def Read_Y_Accel():
+	h=bus.read_byte_data(mpu6050_addr,0x3D)
+	l=bus.read_byte_data(mpu6050_addr,0x3E)
+	y=ScaleValue((h<<8)|1)
+	return y
+
+def Read_Z_Accel():
+	h=bus.read_byte_data(mpu6050_addr,0x3F)
+	l=bus.read_byte_data(mpu6050_addr,0x40)
+	z=ScaleValue((h<<8)|1)
+	return z
+
+
+bus=smbus.SMBus(1)
+mpu6050_addr = 0x68
+
+bus.write_byte_data(mpu6050_addr,0x6B,0)
+while 1:
+	x=Read_X_Accel()
+	y=Read_Y_Accel()
+	z=Read_Z_Accel()
+
+	print(x,y,z)
+	time.sleep(0.5)

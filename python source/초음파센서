@@ -1,0 +1,47 @@
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode( GPIO.BCM )
+
+TRIG =17  # WPi 0,  pin 11
+ECHO =18  # WPi 1,  pin 12
+
+GPIO.setup( TRIG, GPIO.OUT )
+GPIO.setup( ECHO, GPIO.IN )
+
+def GetDistance() :
+    GPIO.output( TRIG, False )
+    time.sleep(0.5)
+
+    GPIO.output( TRIG, True )
+    time.sleep(0.00001)
+    GPIO.output( TRIG, False )
+
+    while GPIO.input( ECHO ) == 0 :
+        pulse_start = time.time()
+        
+    while GPIO.input( ECHO ) == 1 :
+        pulse_end = time.time()
+
+    pulse_duration = pulse_end - pulse_start
+    distance = pulse_duration * 170
+    distance = round( distance, 2 )
+
+    return distance
+
+if __name__ == "__main__" :
+    try :
+        while(1) :
+            now =time.localtime()
+            timestamp = ( "%04d-%02d-%02d %02d:%02d:%02d" %
+                          ( now.tm_year, now.tm_mon, now.tm_mday,
+                            now.tm_hour, now.tm_min, now.tm_sec ))
+            print( "%s %0.2fm" % (timestamp, GetDistance() ))
+            time.sleep(1)
+    except :
+        print("\nPress Ctrl -C")
+    finally :
+        print("END")
+        GPIO.cleanup()
+        
+            

@@ -33,4 +33,4 @@ while 1:
 	z=Read_Z_Accel()
 
 	print(x,y,z)
-	time.sleep(0.5)
+	time.sleep(0.1)

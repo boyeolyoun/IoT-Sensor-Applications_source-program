@@ -1,0 +1,1055 @@
+1. P43
+
+import RPi.GPIO as GPIO
+import time
+
+LED = 17
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(LED, GPIO.OUT)
+
+try :
+    while True :
+        GPIO.output(LED, False)
+        print("LED Off ...")
+        time.sleep(0.5)
+
+        GPIO.output(LED, True)
+        print("LED On ...")
+        time.sleep(0.5)
+except :
+    GPIO.cleanup()
+    print("end")
+
+2. P46
+
+int led =8;
+int val = 0;
+
+void setup(){
+  pinMode(led, OUTPUT);
+}
+
+void loop(){
+  digitalWrite(led, HIGH);
+  delay(1000);
+  digitalWrite(led, LOW);
+  delay(1000);
+}
+
+3. P47
+
+int btnPin=2;
+int btnState=LOW;
+
+void setup(){
+  Serial.begin(9600);
+  pinMode(btnPin,INPUT);
+}
+
+void loop(){
+  btnState = digitalRead(btnPin);
+  Serial.println(btnState);
+}
+
+4. P47
+
+int btnPin=2;
+int btnState=LOW;
+
+void setup(){
+  Serial.begin(9600);
+  pinMode(btnPin,INPUT);
+}
+
+void loop(){
+  btnState = digitalRead(btnPin);
+  Serial.println(btnState);
+  delay(10);
+}
+
+5. P49
+
+import RPi.GPIO as GPIO
+
+SWITCH = 18
+
+LED = 23
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(LED, GPIO.OUT)
+GPIO.setup(SWITCH, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+
+try :
+    while True :
+        if GPIO.input(SWITCH) == 1 :
+            GPIO.output(LED, True)
+        else :
+            GPIO.output(LED, False)
+
+except :
+    GPIO.cleanup()
+    print("end")
+
+6. P51
+
+import RPi.GPIO as GPIO
+
+LED = 18
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(LED, GPIO.OUT)
+
+pwm = GPIO.PWM(LED, 100)
+pwm.start(0)
+
+try:
+    while True:
+        pwm.ChangeDutyCycle(50)
+except:
+    pwm.stop()
+    GPIO.cleanup()
+
+7. P54
+
+import neopixel, time, sys
+
+LED_COUNT = 5
+LED_PIN = 18
+LED_BRIGHTNESS = 255
+LED_CHANNEL =0
+
+def SetColor(strip, num, color, milli_sec) :
+    for i in range(milli_sec) :
+        strip.setPixelColor(num, color)
+        strip.show()
+        time.sleep(0.001)
+
+strip = neopixel.Adafruit_NeoPixel(LED_COUNT, LED_PIN, 800000, 10, False, LED_BRIGHTNESS,
+LED_CHANNEL, 1050624)
+strip.begin()
+
+def OneByOne() :
+    for i in range(LED_COUNT) :
+        if i % 3 == 1 :
+            for j in range(256) :
+                SetColor(strip, i, neopixel.Color(j, 0, 255 - j), 1)
+            for j in range(256) :
+                SetColor(strip, i, neopixel.Color(255 - j, j, 0), 1)
+            for j in range(256) :
+                SetColor(strip, i, neopixel.Color(0, 255 - j, j), 1)
+        if i % 3 == 2 :
+            for j in range(256) :
+                SetColor(strip, i, neopixel.Color(255 - j, j, 0), 1)
+            for j in range(256) :
+                SetColor(strip, i, neopixel.Color(0, 255 - j, j), 1)
+            for j in range(256) :
+                SetColor(strip, i, neopixel.Color(j, 0, 255 - j), 1)
+        if i % 3 == 0 :
+            for j in range(256) :
+                SetColor(strip, i, neopixel.Color(0, 255 - j, j), 1)
+            for j in range(256) :
+                SetColor(strip, i, neopixel.Color(j, 0, 255 - j), 1)
+            for j in range(256) :
+                SetColor(strip, i, neopixel.Color(255 - j, j, 0), 1)
+def All() :
+    for j in range(256) :
+        for i in range(LED_COUNT) :
+            if i % 3 == 1 :
+                SetColor(strip, i, neopixel.Color(j, 0, 255 - j), 1)
+            if i % 3 == 2 :
+                SetColor(strip, i, neopixel.Color(0, 255 - j, j), 1)
+            if i % 3 == 0 :
+                SetColor(strip, i, neopixel.Color(0, 255 - j, j), 1)
+    for j in range(256) :
+        for i in range(LED_COUNT) :
+            if i % 3 == 1 :
+                SetColor(strip, i, neopixel.Color(255 - j, j, 0), 1)
+            if i % 3 == 2 :
+                SetColor(strip, i, neopixel.Color(0, 255 - j, j), 1)
+            if i % 3 == 0 :
+                SetColor(strip, i, neopixel.Color(j, 0, 255 - j), 1)
+    for j in range(256) :
+        for i in range(LED_COUNT) :
+            if i % 3 == 1 :
+                SetColor(strip, i, neopixel.Color(0, 255 - j, j), 1)
+            if i % 3 == 2 :
+                SetColor(strip, i, neopixel.Color(j, 0, 255 - j), 1)
+            if i % 3 == 0 :
+                SetColor(strip, i, neopixel.Color(255 - j, j, 0), 1)
+try  :
+    print("Ctrl-C")
+
+    while True :
+        All()
+
+        for i in range(LED_COUNT) :
+            SetColor(strip, i, neopixel.Color(0, 0, 0), 1)
+
+        OneByOne()
+
+except :
+    print("\nuse Ctrl-C. exit.")
+
+    for i in range(LED_COUNT) :
+        SetColor(strip, i, neopixel.Color(0, 0, 0), 1)
+
+    sys.exit(0)    
+
+8. P62 (C Source)
+
+#include <stdio.h>
+#include <wiringPi.h>
+#include <wiringPiSPI.h>
+#define  SPI_CHANNEL 0
+#define  SPI_SPEED 1000000
+#define  BRIGHT 0
+
+void data_8x8led( unsigned char msb, int lsb, int select) { 
+	int i;
+	unsigned char out[2] = { 0 };
+	out[0] = msb;   //Least Significant Bit, 데이터 형에서의 가장 낮은 위치의 Bit 2^0
+	if(select ==2 ) {   //Most Significant Bit, 데이터 형의 최상위 비트, 2^7
+		for( i = 0; i< 8; ++i){
+			out[1] = (( lsb % 10) << 1 );
+			lsb = lsb / 10;
+		}
+	}else {
+		out[1] = lsb;
+	}
+	wiringPiSPIDataRW(SPI_CHANNEL, out, 2);
+}
+
+
+void init_8x8led_spi( void) {
+	unsigned char out[2];
+	int i;
+	data_8x8led(0x0B, 0x07, 0);
+	data_8x8led(0x09, 0x00, 0);
+    data_8x8led(0x0F, 0x00, 0);
+	data_8x8led(0x0A, BRIGHT, 0);
+	data_8x8led(0x0C, 0x01, 0);
+
+	for( i = 1; i< 9; ++i){
+		data_8x8led (1, 0, 0);
+	}
+}
+int main(void) {
+	if( wiringPiSPISetup(SPI_CHANNEL, SPI_SPEED) == -1 ){
+		printf("SPI ERROR\n");
+		return 1;
+	}
+	init_8x8led_spi();
+	printf("8x8 LED Matrix Test\n");
+	
+	while(1){
+		data_8x8led(1, 36, 0);
+		data_8x8led(2, 90, 0);
+		data_8x8led(3, 129, 0);
+		data_8x8led(4, 129, 0);
+		data_8x8led(5, 66, 0);
+		data_8x8led(6, 26, 0);
+		data_8x8led(7, 24, 0);
+		data_8x8led(8, 0, 0);
+		delay(1000);
+		
+		data_8x8led(1, 0x18, 0);
+		data_8x8led(2, 0x24, 0);
+		data_8x8led(3, 0x42, 0);
+		data_8x8led(4, 0xDB, 0);
+		data_8x8led(5, 0x5A, 0);
+		data_8x8led(6, 0x42, 0);
+		data_8x8led(7, 0x7E, 0);
+		data_8x8led(8, 0x00, 0);
+		delay(1000);
+	}
+	return 0;
+}
+
+9. P64
+
+import RPi.GPIO as GPIO
+import time
+pin = 18
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(pin, GPIO.OUT)
+p = GPIO.PWM(pin, 50)
+p.start(0)
+
+left_angle = 12.5
+center_angle = 7.5
+right_angle = 2.5
+
+def doAngle(angle):
+    p.ChangeDutyCycle(angle)
+    print ("Angle: %d" %angle)
+    time.sleep(0.5)
+try :
+    while True:
+        var = input("Enter L/R/C :")
+        if var == 'R' or var == 'r' :
+            print ("Right")
+            doAngle(right_angle)
+        elif var == 'L' or var == 'l':
+            print ("Left")
+            doAngle(left_angle)
+        elif var == 'C' or var == 'c':
+            print ("Center")
+            doAngle(center_angle)
+except KeyboardInterrupt:
+    p.stop() 
+GPIO.cleanup()   
+
+10. P67
+
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode( GPIO.BCM )
+
+TRIG =17  # WPi 0,  pin 11
+ECHO =18  # WPi 1,  pin 12
+
+GPIO.setup( TRIG, GPIO.OUT )
+GPIO.setup( ECHO, GPIO.IN )
+
+def GetDistance() :
+    GPIO.output( TRIG, False )
+    time.sleep(0.5)
+
+    GPIO.output( TRIG, True )
+    time.sleep(0.00001)
+    GPIO.output( TRIG, False )
+
+    while GPIO.input( ECHO ) == 0 :
+        pulse_start = time.time()
+        
+    while GPIO.input( ECHO ) == 1 :
+        pulse_end = time.time()
+
+    pulse_duration = pulse_end - pulse_start
+    distance = pulse_duration * 170
+    distance = round( distance, 2 )
+
+    return distance
+
+if __name__ == "__main__" :
+    try :
+        while(1) :
+            now =time.localtime()
+            timestamp = ( "%04d-%02d-%02d %02d:%02d:%02d" %
+                          ( now.tm_year, now.tm_mon, now.tm_mday,
+                            now.tm_hour, now.tm_min, now.tm_sec ))
+            print( "%s %0.2fm" % (timestamp, GetDistance() ))
+            time.sleep(1)
+    except :
+        print("\nPress Ctrl -C")
+    finally :
+        print("END")
+        GPIO.cleanup()
+        
+
+11. P70 Arduino Source
+
+#include <Servo.h> 
+#define TRIG_PIN 2
+#define ECHO_PIN 3
+Servo servo;
+void setup() {
+  Serial.begin(9600);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  servo.attach(9);
+}
+unsigned int c = 10, delta = 1;
+boolean working = true;
+void loop() {
+  if(Serial.available()){
+    String str = Serial.readStringUntil('$');
+    if(str == "pause") working = false;
+    else if(str == "resume") working = true;
+    else if(str != "") c = str.toInt();
+  }
+  servo.write(c);
+  if(working == true) c = c + delta;
+  delay(25);
+  float dist = getDist(); // 원래는 measure()
+  Serial.print(c);
+  Serial.print(":");
+  Serial.println(dist);
+  if(c >= 170) delta = -1;
+  else if(c <= 10) delta = 1;
+}
+float getDist(){
+  float dist = 0;
+  digitalWrite(TRIG_PIN, LOW);  
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH); 
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  dist = pulseIn(ECHO_PIN, HIGH, 30000) / 58.2;
+  return dist;
+}
+
+12. P71 Processing Source File name radar_pr.pde
+
+import processing.serial.*;
+Serial serial;
+void setup(){
+  size(400, 300);
+  textSize(12);
+  textAlign(CENTER, CENTER);
+  serial = new Serial(this, "COM6", 19200);
+}
+void draw(){
+  if(serial.available() > 0) {
+    String str = serial.readStringUntil('\n');
+    if(str != null) {
+      String [] cmd = splitTokens(str, ":\r");
+      if(cmd.length > 2) {
+        int angle = int(cmd[0]);
+        float dist = float(cmd[1]);
+        //println("*" + angle + "=" + dist);
+        drawRadar(angle, dist);
+      }
+    }
+  }
+  drawButton(20, 20, 100, 20, "Pause");  
+  drawButton(20, 50, 100, 20, "Resume");
+}
+
+void drawButton(int x, int y, int w, int h, String str){
+  fill(255, 255, 0);
+  rect(x, y, w, h);
+  fill(0);
+  text(str, x+w/2, y+h/2);
+}
+
+void mouseClicked(){
+  if(mouseX > 20 && mouseX < 120 && mouseY > 20 && mouseY < 40)
+    serial.write("pause$");
+  else if(mouseX > 20 && mouseX < 120 && mouseY > 50 && mouseY < 70)
+    serial.write("resume$");
+}
+
+
+13. P72 draw_radar.pde
+
+// file명 : drawRadar
+
+int[] dir = new int[45];
+float[] range = new float[45];
+int nowPos = 0;
+
+void drawRadar(int a, float d){
+  background(0);
+  
+  pushMatrix();
+  translate(width/2, height);
+  rotate(radians(180));
+  
+  if(d > 100) d = 100;
+  dir[nowPos] = a;
+  range[nowPos] = d;
+  
+  for(int i=0; i<45; i++) {
+    int n = (nowPos - i + 45) % 45;
+    pushMatrix();
+    rotate(radians(dir[n]));
+    stroke(0, 255, 0, 255-i*5);
+    strokeWeight(3);
+    line(0, 0, range[n]*2, 0);
+    stroke(255, 0, 0, 255-i*5);
+    line(range[n]*2, 0, 200, 0);
+    popMatrix();
+  }
+  nowPos = (nowPos + 1) % 45;
+  
+  noFill();
+  stroke(255, 255, 0);
+  strokeWeight(1);
+  arc(0, 0, 400, 400, radians(0), radians(180));
+  arc(0, 0, 300, 300, radians(0), radians(180));
+  arc(0, 0, 200, 200, radians(0), radians(180));
+  arc(0, 0, 100, 100, radians(0), radians(180));
+  for(int i=0; i<=12; i++) {
+    pushMatrix();
+    rotate(radians(15*i)); 
+    line(0, 0, 200, 0);
+    popMatrix();
+  }
+  
+  popMatrix();
+}
+
+14. P75
+
+import RPi.GPIO as GPIO
+
+INFRARED = 7
+LED = 10
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(INFRARED, GPIO.IN)
+
+GPIO.setup(LED, GPIO.OUT)
+
+try :
+	while True :
+		if GPIO.input(INFRARED) == 1 :
+			
+			GPIO.output(LED, True)
+		else :
+			
+			GPIO.output(LED, False)
+			
+except : 
+	GPIO.cleanup()
+	print("end")
+
+15. P77
+
+import RPi.GPIO as GPIO
+import time
+
+FAN_IA = 23
+FAN_IB = 24
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(FAN_IA, GPIO.OUT)
+GPIO.setup(FAN_IB, GPIO.OUT)
+
+def Left_2_Second() :
+	GPIO.output(FAN_IA, True)
+	GPIO.output(FAN_IB, False)
+	time.sleep(2)
+	
+def Right_2_Second() :
+	GPIO.output(FAN_IA, False)
+	GPIO.output(FAN_IB, True)
+	time.sleep(2)
+	
+def Wait_2_Second() :
+	GPIO.output(FAN_IA, False)
+	GPIO.output(FAN_IB, False)
+	time.sleep(2)
+	
+if __name__ == "__main__" :
+	try :
+		while True :
+			Left_2_Second()
+			Wait_2_Second()
+			Right_2_Second()
+			Wait_2_Second()
+			
+	except : 
+		GPIO.cleanup()
+		print("end")
+
+16. P78 file name Motor Module
+
+import time
+
+def Left_2_Second() :
+	GPIO.output(FAN_IA, True)
+	GPIO.output(FAN_IB, False)
+	time.sleep(2)
+	
+def Right_2_Second() :
+	GPIO.output(FAN_IA, False)
+	GPIO.output(FAN_IB, True)
+	time.sleep(2)
+	
+def Wait_2_Second() :
+	GPIO.output(FAN_IA, False)
+	GPIO.output(FAN_IB, False)
+	time.sleep(2)
+
+17. P78
+
+import RPi.GPIO as GPIO
+import Motor Module as MOTOR
+
+FAN_IA = 23
+FAN_IB = 24
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(FAN_IA, GPIO.OUT)
+GPIO.setup(FAN_IB, GPIO.OUT)
+
+if __name__ == "__main__" :
+	try :
+		while True :
+			MOTOR.Left_2_Second(GPIO, FAN_IA, FAN_IB)
+			MOTOR.Wait_2_Second(GPIO, FAN_IA, FAN_IB)
+			MOTOR.Right_2_Second(GPIO, FAN_IA, FAN_IB)
+			MOTOR.Wait_2_Second(GPIO, FAN_IA, FAN_IB)
+			
+	except : 
+		GPIO.cleanup()
+		print("end")
+
+18. P79
+
+import RPi.GPIO as GPIO
+import time
+
+FAN_IA = 23
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(FAN_IA, GPIO.OUT)
+
+pwm = GPIO.PWM(FAN_IA, 60)
+pwm.start(0)
+
+def Weak() :
+	pwm.ChangeDutyCycle(66)
+	print("미풍")
+	time.sleep(5)
+	
+def Medium() :
+	pwm.ChangeDutyCycle(33)
+	print("약풍")
+	time.sleep(5)
+	
+def Strong() :
+	pwm.ChangeDutyCycle(0)
+	print("강풍")
+	time.sleep(5)
+
+if __name__ == "__main__" :
+	try :
+		while True :
+			Weak()
+			Medium()
+			Strong()
+	
+	except : 
+		GPIO.cleanup()
+		print("end")
+
+19. P81 Touch Sensor
+
+import RPi.GPIO as GPIO
+
+TouchPin = 11
+Gpin   = 12
+Rpin   = 13
+
+tmp = 0
+
+def setup():
+	GPIO.setmode(GPIO.BOARD)       # Numbers GPIOs by physical location
+	GPIO.setup(Gpin, GPIO.OUT)     # Set Green Led Pin mode to output
+	GPIO.setup(Rpin, GPIO.OUT)     # Set Red Led Pin mode to output
+	GPIO.setup(TouchPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)   
+
+def Led(x):
+	if x == 0:
+		GPIO.output(Rpin, 1)
+		GPIO.output(Gpin, 0)
+	if x == 1:
+		GPIO.output(Rpin, 0)
+		GPIO.output(Gpin, 1)
+	
+
+def Print(x):
+	global tmp
+	if x != tmp:
+		if x == 0:
+			print '    **********'
+			print '    *     ON *'
+			print '    **********'
+	
+		if x == 1:
+			print '    **********'
+			print '    * OFF    *'
+			print '    **********'
+		tmp = x
+
+def loop():
+	while True:
+		Led(GPIO.input(TouchPin))
+		Print(GPIO.input(TouchPin))
+
+def destroy():
+	GPIO.output(Gpin, GPIO.HIGH)       # Green led off
+	GPIO.output(Rpin, GPIO.HIGH)       # Red led off
+	GPIO.cleanup()                     # Release resource
+
+if __name__ == '__main__':     # Program start from here
+	setup()
+	try:
+		loop()
+	except KeyboardInterrupt:
+		destroy()
+
+20. P84
+
+import RPi.GPIO as GPIO
+
+TiltPin=11
+Gpin=12
+Rpin=13
+
+def setup():
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setwarnings(False)
+    GPIO.setup(Gpin,GPIO.OUT)
+    GPIO.setup(Rpin,GPIO.OUT)
+    GPIO.setup(TiltPin,GPIO.IN,pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(TiltPin,GPIO.BOTH,callback=detect,bouncetime=200)
+
+def Led(x):
+    if x ==0:
+        GPIO.output(Rpin,1)
+        GPIO.output(Gpin,0)
+    if x ==1:
+        GPIO.output(Rpin,0)
+        GPIO.output(Gpin,1)
+def print(x):
+    if x == 0:
+        print("***********")
+        print("*  Tilt!  *")
+        print("***********")
+def detect(chn):
+    Led(GPIO.input(TiltPin))
+    print(GPIO.input(TiltPin))
+def loop():
+    while True:
+        pass
+def destroy():
+    GPIO.output(Gpin,GPIO.HIGH)
+    GPIO.output(Rpin,GPIO.HIGH)
+    GPIO.cleanup()
+
+if __name__=='__main__':
+    setup()
+    try:
+        loop()
+    except KeyboardInterrupt:
+        destroy()
+
+21. P86 
+
+import RPi.GPIO as GPIO
+import time
+import math
+
+DO = 17
+Buzz = 18
+GPIO.setmode(GPIO.BCM)
+
+def setup():
+    #ADC.setup(0x48)
+    GPIO.setup(DO, GPIO.IN)
+    GPIO.setup(Buzz, GPIO.OUT)
+    GPIO.output(Buzz, 1)
+
+def Print(x):
+    if x == 1:
+        print('')
+        print('   *********')
+        print('   * Safe~ *')
+        print('   *********')
+        print('')
+    if x == 0:
+        print('')
+        print('   ***************')
+        print('   * Danger Gas! *')
+        print('   ***************')
+        print('')
+
+def loop():
+    status = 1
+    count = 0
+    while True:
+        #print(ADC.read(0))
+        tmp = GPIO.input(DO)
+        if tmp != status:
+            Print(tmp)
+            status = tmp
+        if status == 0:
+            count += 1
+            if count % 2 == 0:
+                GPIO.output(Buzz, 1)
+            else :
+                GPIO.output(Buzz, 0)
+        else:
+            GPIO.output(Buzz, 0)
+            count = 0
+        time.sleep(0.2)
+
+def destroy():
+    GPIO.output(Buzz, 1)
+    GPIO.cleanup()
+
+if __name__ == '__main__':
+    try :
+        setup()
+        loop()
+    except KeyboardInterrupt:
+        destroy()
+
+22. P86 MQ-2/3 Alcohol Ethanol Gas Sensor
+
+import RPi.GPIO as GPIO
+import spidev
+import time
+
+spi-spidev.SpiDev()
+spi.open(0,0)
+spi.max_speed_hz=500000
+def read_spi_adc(adcChannel):
+    adcValue=0
+    buff=spi.xfer2([1, (8+adcChannel)<<4,0])
+    adcValue=((buff[1]&3)<<8)+buff[2]
+    return adcValue
+
+try:
+    while True:
+        adcChannel=0
+        adcValue=read_spi_adc(adcChannel)
+        print("gas %d" %adcValue)
+        time.sleep(0.2)
+except Keyboardinterrupt:
+    spi.close()
+
+23. P90 DHT11
+
+import RPi.GPIO as GPIO
+import time
+
+DHTPIN = 17
+
+GPIO.setmode(GPIO.BCM)
+MAX_UNCHANGE_COUNT = 100
+
+STATE_INIT_PULL_DOWN = 1
+STATE_INIT_PULL_UP = 2
+STATE_DATA_FIRST_PULL_DOWN = 3
+STATE_DATA_PULL_UP = 4
+STATE_DATA_PULL_DOWN = 5
+
+def read_dht11_dat():
+	GPIO.setup(DHTPIN, GPIO.OUT)
+	GPIO.output(DHTPIN, GPIO.HIGH)
+	time.sleep(0.05)
+	GPIO.output(DHTPIN, GPIO.LOW)
+	time.sleep(0.02)
+	GPIO.setup(DHTPIN, GPIO.IN, GPIO.PUD_UP)
+
+	unchanged_count = 0
+	last = -1
+	data = []
+	while True:
+		current = GPIO.input(DHTPIN)
+		data.append(current)
+		if last != current:
+			unchanged_count = 0
+			last = current
+		else:
+			unchanged_count += 1
+			if unchanged_count > MAX_UNCHANGE_COUNT:
+				break
+
+	state = STATE_INIT_PULL_DOWN
+	lengths = []
+	current_length = 0
+
+	for current in data:
+		current_length += 1
+		if state == STATE_INIT_PULL_DOWN:
+			if current == GPIO.LOW:
+				state = STATE_INIT_PULL_UP
+			else:
+				continue
+		if state == STATE_INIT_PULL_UP:
+			if current == GPIO.HIGH:
+				state = STATE_DATA_FIRST_PULL_DOWN
+			else:
+				continue
+		if state == STATE_DATA_FIRST_PULL_DOWN:
+			if current == GPIO.LOW:
+				state = STATE_DATA_PULL_UP
+			else:
+				continue
+		if state == STATE_DATA_PULL_UP:
+			if current == GPIO.HIGH:
+				current_length = 0
+				state = STATE_DATA_PULL_DOWN
+			else:
+				continue
+		if state == STATE_DATA_PULL_DOWN:
+			if current == GPIO.LOW:
+				lengths.append(current_length)
+				state = STATE_DATA_PULL_UP
+			else:
+				continue
+	if len(lengths) != 40:
+		print ("Data not good, skip")
+		return False
+
+	shortest_pull_up = min(lengths)
+	longest_pull_up = max(lengths)
+	halfway = (longest_pull_up + shortest_pull_up) / 2
+	bits = []
+	the_bytes = []
+	byte = 0
+
+	for length in lengths:
+		bit = 0
+		if length > halfway:
+			bit = 1
+		bits.append(bit)
+	print ("bits: %s, length: %d" % (bits, len(bits)))
+	for i in range(0, len(bits)):
+		byte = byte << 1
+		if (bits[i]):
+			byte = byte | 1
+		else:
+			byte = byte | 0
+		if ((i + 1) % 8 == 0):
+			the_bytes.append(byte)
+			byte = 0
+	print ("the_bytes")
+	checksum = (the_bytes[0] + the_bytes[1] + the_bytes[2] + the_bytes[3]) & 0xFF
+	if the_bytes[4] != checksum:
+		print ("Data not good, skip")
+		return False
+
+	return the_bytes[0], the_bytes[2]
+
+def main():
+	print ("Raspberry Pi wiringPi DHT11 Temperature test program\n")
+	while True:
+		result = read_dht11_dat()
+		if result:
+			humidity, temperature = result
+			print ("humidity: %s %%,  Temperature: %s C`" % (humidity, temperature))
+		time.sleep(1)
+
+def destroy():
+	GPIO.cleanup()
+
+if __name__ == '__main__':
+	try:
+		main()
+	except KeyboardInterrupt:
+		destroy() 
+
+24. P93 Adafruit DHT11
+
+import Adafruit_DHT, time, sys
+
+sensor = Adafruit_DHT.DHT11
+pin = 23
+
+if __name__ == "__main__" :
+	try:
+		while(True):
+			humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+			now = time.localtime()
+			timestamp = ("%04d-%02d-%02d %02d:%02d:%02d" % (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec))
+
+            print("%s humidity : %0.1f\n%s temperature : %0.1f\n" % (timestamp, humidity, timestamp, temperature))
+			
+            time.sleep(1)
+    except :
+        print("Error OR Press Ctrl - C")
+    finally :
+        print("END")
+        sys.exit(1)
+
+25. P105 ThingSpeak DHT11
+
+import Adafruit_DHT
+import time
+import datetime
+import urllib.request
+import urllib.error
+
+sensor = Adafruit_DHT.DHT11
+pin = 4
+
+while True:
+    wtime=datetime.datetime.now()
+    h, temp = Adafruit_DHT.read_retry(sensor, pin)
+
+    if h is not None and temp is not None:
+        print(wtime, "Temp={0:0.1f}C Humidity={1:0.1f}%". format(temp, h))
+        time.sleep(2)
+
+        html = urllib.request.urlopen("https://api.thingspeak.com/update?api_key=WXLEWAMO5C79GW21&field1="+str(temp)+"&field2="+str(h))
+    else:
+        print('Failed to get reading. Try again!')
+
+26. P111 DBtest.py
+
+import time
+import Adafruit_DHT
+import psycopg2
+
+sensor = Adafruit_DHT.DHT11
+pin = 4 # physical 7
+month_string = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",\
+"Oct", "Nov", "Dec"]
+month_num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+
+conn = psycopg2.connect("host=localhost dbname=dht11 user=postgres password=1234")
+conn.autocommit = True
+cur = conn.cursor()
+
+try:
+    while True:
+        humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+        time_split = time.ctime().split(" ")
+        year = time_split[4]
+        month = time_split[1]
+        day = time_split[2]
+        week = time_split[0]
+        current_time = time_split[3]
+
+        for i in range(0, 12):
+            if month == month_string[i]:
+                month = month_num[i]
+                break
+        
+        cur.execute("INSERT INTO dht11 VALUES('{}.{}.{} {}', '{}', '{}')".format\
+(year, month, day, current_time, temperature, humidity))
+
+        print("{}.{}.{} / {} / Temperature: {} C, Humidity: {}%".format(year, month,\
+day, current_time, temperature, humidity))
+        time.sleep(2)
+except:
+    cur.close()
+    conn.close()
+
+27. P113 dht11_read.py
+
+import psycopg2 as db
+
+conn = db.connect("host=localhost dbname=dht11 user=postgres password=1234")
+cur = conn.cursor()
+
+cur.execute("""select column_name from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'dht11' """)
+describe = cur.fetchall()
+
+for desc in describe :
+    print(desc[0], end = '\t\t')
+
+print('\n-------------------------------------------------------------')
+
+cur.execute("select * from dht11")
+rows = cur.fetchall()
+
+for row in rows :
+    for r in row :
+        print(r, end = '\t')
+        if row[len(row) - 2] == r:
+            print('\t\t', end = '')
+    print()
+cur.close()
+conn.close()

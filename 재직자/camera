@@ -1,0 +1,44 @@
+6.	웹 스트리밍 (Mjpg-Stream)
+1. 카메라 모듈을 사용하기 위해 라즈비안 업그레이드 명령어 입력  
+$sudo apt-get update
+$sudo apt-get upgrade
+ 
+2. mjpg-streamer 소스 코드를 다운로드 받을 디렉토리를 생성
+
+pi@raspberrypi:~ $ mkdir project 
+
+pi@raspberrypi:~ $ cd project 
+pi@raspberrypi:~/project $ 
+3. 깃허브에서 소스 코드를 다운로드 받기위해서 git가 필요.
+pi@raspberrypi:~/project $ sudo apt-get install git 
+4. mjpg-streamer 소스 코드를 다운로드 
+pi@raspberrypi:~/project $ git clone https://github.com/jacksonliam/mjpg-streamer 
+5. mjpg-streamer 소스 코드를 컴파일하기 위해 필요한 패키지를 설치
+
+pi@raspberrypi:~/project $ sudo apt-get install cmake python-imaging libjpeg-dev 
+6. mjpg-streamer 소스 디렉토리로 이동하여 컴파일 및 설치를 진행
+pi@raspberrypi:~/project $ cd mjpg-streamer/mjpg-streamer-experimental/ 
+
+pi@raspberrypi:~/project/mjpg-streamer/mjpg-streamer-experimental $ make CMAKE_BUILD_TYPE=Debug 
+
+pi@raspberrypi:~/project/mjpg-streamer/mjpg-streamer-experimental $ sudo make install 
+
+pi@raspberrypi:~/project/mjpg-streamer/mjpg-streamer-experimental $ cd 
+
+pi@raspberrypi:~ $ 
+7. 웹캠으로부터 캡처한 영상을 HTTP 포트 8090으로 스트리밍 실행. 
+pi@raspberrypi:~ $ mjpg_streamer -i "input_uvc.so" -o "output_http.so -p 8090 -w /usr/local/share/mjpg-streamer/www/" 
+또는
+ 
+mjpg_streamer -i "input_raspicam.so -vf" -o "output_http.so -p 8090 -w /usr/local/share/mjpg-streamer/www/"
+
+
+
+
+
+
+웹에서 스트리밍 영상
+
+크롬에서 확인 주소 : http://라즈베리파이IP:8090
+웹문서없이 이미지만 받고 싶다면 다음 주소를 사용
+라즈베리파이_아이피주소:8090/?action=stream
